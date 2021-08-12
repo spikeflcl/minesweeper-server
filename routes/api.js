@@ -9,7 +9,7 @@ router.use('/stats', statsRouter)
 router.post('/register', function(req, res) {
     const username = req.body.username;
     const password = req.body.password;
-    
+
     Player.findOne({ username: username }, function(err, obj) {
         if (err) console.log(err);
     
@@ -43,7 +43,9 @@ router.post('/login', function(req, res) {
             if (err) console.log(err);
 
             if (result) {
-                const token = Math.random().toString(36).substr(2);
+                const token1 = Math.random().toString(36).substr(2);
+                const token2 = Math.random().toString(36).substr(2);
+                const token = token1 + token2;
                 obj.token = token;
                 obj.save();
                 return res.status(200).send({id: obj._id, token, username: obj.username});
