@@ -9,8 +9,7 @@ var playerSchema = new Schema(
     wins: {type: Number, min: 0, default: 0},
     losses: {type: Number, min: 0, default: 0},
     gameTimes: [{type: Number, min: 0}],
-    token: {type: String, minLength: 10, maxLength: 100},
-    active: {type: Boolean, default: false}
+    token: {type: String, minLength: 10, maxLength: 100}
   }
 );
 
