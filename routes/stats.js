@@ -3,41 +3,43 @@ var router = express.Router();
 const Player = require('../models/player');
 
 router.get('/', function(req, res) {
-    const id = req.query.id;
-    const token = req.query.token;
-
-    if (token === null) {
+    
+    if (!req.query.token) {
         return res.status(401).send({errors: ['Brak tokena']});
     }
+
+    const token = req.query.token;
+    const id = req.query.id;
     
     Player.findOne({ _id: id }, function(err,obj) {
-        if (err) console.log(err);
+        if (err) return console.log(err);
         
-        if (obj === null) { 
+        if (!obj) { 
             return res.status(400).send({errors: ['Brak id/złe dane']});
         }
         if (obj.token !== token) {
             return res.status(403).send({errors: ['Nieaktualny token']});
-        } else {
-            return res.status(200).send({avgWinTime: obj.getAvgTime, wins: obj.wins, losses: obj.losses})
         }
+
+        return res.status(200).send({avgWinTime: obj.getAvgTime, wins: obj.wins, losses: obj.losses})
     });
 });
 
 router.post('/countGame', function(req, res) {
+    if (!req.body.token) {
+        return res.status(401).send({errors: ['Brak tokena']});
+    }
+
     const won = req.body.won;
     const time = req.body.time;
     const id = req.body.id;
     const token = req.body.token;
 
-    if (req.query.token === null) {
-        return res.status(401).send({errors: ['Brak tokena']});
-    }
 
     Player.findOne({ _id: id }, function(err, obj) {
-        if (err) console.log(err);
+        if (err) return console.log(err);
         
-        if (obj === null) {
+        if (!obj) {
             return res.status(400).send({errors: ['Błędne id']});
         }
         if (obj.token !== token) {
