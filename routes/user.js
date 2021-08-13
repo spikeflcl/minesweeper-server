@@ -9,10 +9,8 @@ const nodemailer = require('nodemailer');
 
 
 router.post('/:id/sendDeleteEmail', (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).send({errors: ['Błędne dane']});
-    }
-
+    if (!req.params.id) return res.status(400).send({errors: ['Błędne dane']});
+    
     const userID = req.params.id;
 
     Player.findOne({ _id: userID }, (err, obj) => {
@@ -31,17 +29,17 @@ router.post('/:id/sendDeleteEmail', (req, res) => {
                 port: 587,
                 secure: false,
                 auth: {
-                  user: testAccount.user,
-                  pass: testAccount.pass,
+                    user: testAccount.user,
+                    pass: testAccount.pass,
                 },
             });
             
             let info = await transporter.sendMail({
-              from: '"Spike" <lukasz.piwowar1@protonmail.com>',
-              to: "dupa@dupa.com", 
-              subject: "Delete User Account - Minesweeper",
-              text: `Enter link below to delete account \n http://localhost:8080/jsExercismCourse/deleteUser?token=${token}`, // plain text body
-              html: `<p> Enter <a href="http://localhost:8080/jsExercismCourse/deleteUser?token=${token}">this link</a> to delete account.</p>`, 
+                from: '"Spike" <lukasz.piwowar1@protonmail.com>',
+                to: "dupa@dupa.com", 
+                subject: "Delete User Account - Minesweeper",
+                text: `Enter link below to delete account \n http://localhost:8080/jsExercismCourse/deleteUser?token=${token}`, // plain text body
+                html: `<p> Enter <a href="http://localhost:8080/jsExercismCourse/deleteUser?token=${token}">this link</a> to delete account.</p>`, 
             });
           
             console.log("Message sent: %s", info.messageId);
@@ -51,7 +49,6 @@ router.post('/:id/sendDeleteEmail', (req, res) => {
         main().catch(console.error);
         
         obj.save();
-
         res.status(200).send('Wyslano mail');
         
     });
@@ -60,9 +57,7 @@ router.post('/:id/sendDeleteEmail', (req, res) => {
 // DELETE /api/user/{user.id}?token={user.token}&deleteToken={user.deleteToken} - 204
 
 router.delete('/:id', (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).send({errors: ['Błędne dane']});
-    }
+    if (!req.params.id) return res.status(400).send({errors: ['Błędne dane']});
     
     const id = req.params.id;
 
@@ -74,12 +69,13 @@ router.delete('/:id', (req, res) => {
         const token = req.query.token;
         const deleteToken = req.query.deleteToken;
 
-        if ( obj.token === token && obj.deleteToken === deleteToken) {
-            Player.remove({ _id: id }, (err) => {
-                if (err) return console.log(err);
-                res.status(204).send('Successful deletion');
-            });
-        }
+        if ( obj.token !== token || obj.deleteToken !== deleteToken) return res.status(400);
+        
+        Player.remove({ _id: id }, (err) => {
+            if (err) return console.log(err);
+            res.status(204).send('Successful deletion');
+        });
+    
     })
 });
 
