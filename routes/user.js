@@ -3,17 +3,12 @@ const router = express.Router();
 const Player = require('../models/player');
 const nodemailer = require('nodemailer');
 
-// POST /api/user/{user.id}/sendDeleteEmail - 
-// wysłanie mail z linkiem 
-// http://localhost:8080/jsExercismCourse/deleteUser?token={user.deleteToken} 204
-
-
 router.post('/:id/sendDeleteEmail', (req, res) => {
     if (!req.params.id) return res.status(400).send({errors: ['Błędne dane']});
     
-    const userID = req.params.id;
+    const _id = req.params.id;
 
-    Player.findOne({ _id: userID }, (err, obj) => {
+    Player.findOne({ _id }, (err, obj) => {
         if (err) return console.log(err);
         if (!obj) return res.status(400).send({errors: ['Bledne dane/zle id']});
 
@@ -54,14 +49,12 @@ router.post('/:id/sendDeleteEmail', (req, res) => {
     });
 });
 
-// DELETE /api/user/{user.id}?token={user.token}&deleteToken={user.deleteToken} - 204
-
 router.delete('/:id', (req, res) => {
     if (!req.params.id) return res.status(400).send({errors: ['Błędne dane']});
     
-    const id = req.params.id;
+    const _id = req.params.id;
 
-    Player.findOne({ _id: id }, (err, obj) => {
+    Player.findOne({ _id }, (err, obj) => {
         if (err) return console.log(err);
 
         if (!req.query.token || !req.query.deleteToken) return res.status(400).send({errors: ['Bledne dane']});
@@ -71,7 +64,7 @@ router.delete('/:id', (req, res) => {
 
         if ( obj.token !== token || obj.deleteToken !== deleteToken) return res.status(400);
         
-        Player.remove({ _id: id }, (err) => {
+        Player.remove({ _id }, (err) => {
             if (err) return console.log(err);
             res.status(204).send('Successful deletion');
         });
