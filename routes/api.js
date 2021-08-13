@@ -1,19 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const statsRouter = require('./stats');
+const userRouter = require('./user');
 const Player = require('../models/player');
 const bcrypt = require('bcrypt');
 
-router.use('/stats', statsRouter)
+router.use('/stats', statsRouter);
+router.use('/user', userRouter);
 
 router.post('/register', function(req, res) {
     const username = req.body.username;
     const password = req.body.password;
 
-    Player.findOne({ username: username }, function(err, obj) {
+    Player.findOne({ username }, function(err, obj) {
         if (err) return console.log(err);
     
-        if (!obj) {
+        if (obj) {
             return res.status(400).send({errors: ['Nazwa już zajęta.']});
         }
 
@@ -23,7 +25,7 @@ router.post('/register', function(req, res) {
         bcrypt.hash(password, 12, function(err, password){
             if (err) return console.log(err);
 
-            const player = new Player({username: username, password});
+            const player = new Player({username, password});
             player.save();
             return res.status(201).send({id: player._id});                    
         })

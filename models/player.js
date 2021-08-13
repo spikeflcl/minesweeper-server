@@ -9,7 +9,8 @@ var playerSchema = new Schema(
     wins: {type: Number, min: 0, default: 0},
     losses: {type: Number, min: 0, default: 0},
     gameTimes: [{type: Number, min: 0}],
-    token: {type: String, minLength: 10, maxLength: 100}
+    token: {type: String, minLength: 10, maxLength: 100},
+    deleteToken: {type: String, minLength: 10, maxLength: 100}
   }
 );
 

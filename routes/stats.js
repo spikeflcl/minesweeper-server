@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const Player = require('../models/player');
 
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
     
     if (!req.query.token) {
         return res.status(401).send({errors: ['Brak tokena']});
@@ -11,7 +11,7 @@ router.get('/', function(req, res) {
     const token = req.query.token;
     const id = req.query.id;
     
-    Player.findOne({ _id: id }, function(err,obj) {
+    Player.findOne({ _id: id }, (err,obj) => {
         if (err) return console.log(err);
         
         if (!obj) { 
@@ -25,7 +25,7 @@ router.get('/', function(req, res) {
     });
 });
 
-router.post('/countGame', function(req, res) {
+router.post('/countGame', (req, res) => {
     if (!req.body.token) {
         return res.status(401).send({errors: ['Brak tokena']});
     }
@@ -36,7 +36,7 @@ router.post('/countGame', function(req, res) {
     const token = req.body.token;
 
 
-    Player.findOne({ _id: id }, function(err, obj) {
+    Player.findOne({ _id: id }, (err, obj) => {
         if (err) return console.log(err);
         
         if (!obj) {
