@@ -58,9 +58,14 @@ router.post('/login', (req, res) => {
                 obj.token = hash;
                 
                 obj.save();
-                
+
                 return res.status(200).send({id: obj._id, token, username: obj.username});
             });
+
+            setTimeout( () => {
+                obj.token = null;
+                obj.save();
+            }, 10000);
             
         });
     });
