@@ -3,9 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb+srv://minesweeper-admin:airh2Zi9ijNY5xzZR58ck5jLiEgYkgWA9iLUYW9LcD65@cluster0.0u3bc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+var mongoDB = `mongodb+srv://${process.env.MONGO_LOGIN}:${process.env.MONGO_PASSWORD}@cluster0.clhgs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;

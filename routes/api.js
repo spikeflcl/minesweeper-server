@@ -62,6 +62,8 @@ router.post('/login', (req, res) => {
                 return res.status(200).send({id: obj._id, token, username: obj.username});
             });
 
+            // Timeout - not recommended
+
             // setTimeout( () => {
             //     obj.token = null;
             //     obj.save();
