@@ -16,7 +16,7 @@ var playerSchema = new Schema(
 
 playerSchema
   .virtual('getAvgTime')
-  .get(function () {
+  .get( function() {
     const array = this.gameTimes;
     if (array.length === 0) return '0';
 

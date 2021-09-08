@@ -62,10 +62,10 @@ router.post('/login', (req, res) => {
                 return res.status(200).send({id: obj._id, token, username: obj.username});
             });
 
-            setTimeout( () => {
-                obj.token = null;
-                obj.save();
-            }, 10000);
+            // setTimeout( () => {
+            //     obj.token = null;
+            //     obj.save();
+            // }, 10000);
             
         });
     });
